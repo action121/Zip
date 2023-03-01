@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "Zip"
-  s.version          = "2.1.2"
+  s.version          = "2.1.3"
   s.summary          = "Zip and unzip files in Swift."
   s.swift_version    = "5.3"
   s.swift_versions   = ["4.2", "5.0", "5.1", "5.3"]
@@ -29,14 +29,26 @@ Pod::Spec.new do |s|
   s.social_media_url   = "http://twitter.com/marmelroy"
 
   s.ios.deployment_target = '9.0'
-  s.tvos.deployment_target = '9.0'
-  s.watchos.deployment_target = '3.0'
-  s.osx.deployment_target = '10.9'
   s.requires_arc = true
 
-  s.source_files = 'Zip/*.{swift,h}', 'Zip/minizip/*.{c,h}', 'Zip/minizip/include/*.{c,h}'
-  s.public_header_files = 'Zip/*.h'
-  s.pod_target_xcconfig = {'SWIFT_INCLUDE_PATHS' => '$(SRCROOT)/Zip/Zip/minizip/**','LIBRARY_SEARCH_PATHS' => '$(SRCROOT)/Zip/Zip/'}
+  s.source_files = [
+         'Zip/**/{*.swift,*.h,*.m,*.c,*.modulemap}',
+  ]
+  s.public_header_files = [
+         'Zip/*.h'
+  ]
+  s.preserve_paths = [
+    'Zip/minizip/module/module.modulemap',
+  ]
+  s.pod_target_xcconfig = {
+       "OTHER_SWIFT_FLAGS" => '$(inherited) -D HAVE_AES',
+       "OTHER_CFLAGS" => '$(inherited) -D HAVE_AES',
+       'SWIFT_INCLUDE_PATHS' => [
+          '$(PODS_ROOT)/Zip/minizip/module',
+          '$(PODS_TARGET_SRCROOT)/Zip/minizip/module',
+        ]
+  }
+
   s.libraries = 'z'
-  s.preserve_paths  = 'Zip/minizip/module/module.modulemap'
+
 end
